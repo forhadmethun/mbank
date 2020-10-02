@@ -13,6 +13,8 @@ import com.forhadmethun.accountservice.utility.dto.mapper.TransactionMapper;
 import com.forhadmethun.accountservice.utility.dto.model.TransactionDto;
 import com.forhadmethun.accountservice.utility.exception.PersistenceException;
 import com.forhadmethun.accountservice.utility.exception.RequestException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +23,25 @@ import java.util.List;
 
 @RestController
 public class TransactionController {
+    @Value("${topic.exchange}")
+    private String EXCHANGE;
+
+    @Value("${exchange.queue.transaction.routing.key}")
+    public String ROUTING_KEY_TRANSACTION;
+
     private final AccountService accountService;
     private final BalanceService balanceService;
     private final TransactionService transactionService;
+    private final RabbitTemplate rabbitTemplate;
 
     public TransactionController(
             AccountService accountService,
             BalanceService balanceService,
-            TransactionService transactionService) {
+            TransactionService transactionService, RabbitTemplate rabbitTemplate) {
         this.accountService = accountService;
         this.balanceService = balanceService;
         this.transactionService = transactionService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @PostMapping("/transaction")
@@ -47,6 +57,7 @@ public class TransactionController {
         TransactionDto transaction = transactionService.createTransaction(
                 transactionDto,
                 balanceInTransactionCurrency.get());
+        rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY_TRANSACTION, transaction);
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
     @GetMapping("/transaction/{accountId}")

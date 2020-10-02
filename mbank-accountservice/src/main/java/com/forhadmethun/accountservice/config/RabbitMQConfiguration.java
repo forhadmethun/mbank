@@ -16,19 +16,20 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfiguration {
-    @Value("${queue.name}")
-    private String QUEUE;
+    @Value("${queue.account.name}")
+    private String QUEUE_ACCOUNT;
+
+    @Value("${queue.transaction.name}")
+    private String QUEUE_TRANSACTION;
 
     @Value("${topic.exchange}")
     private String EXCHANGE;
 
-    @Value("${exchange.queue.routing.key}")
-    public String ROUTING_KEY;
+    @Value("${exchange.queue.account.routing.key}")
+    public String ROUTING_KEY_ACCOUNT;
 
-    @Bean
-    public Queue queue() {
-        return new Queue(QUEUE);
-    }
+    @Value("${exchange.queue.transaction.routing.key}")
+    public String ROUTING_KEY_TRANSACTION;
 
     @Bean
     public TopicExchange exchange() {
@@ -36,8 +37,23 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+    Queue queueAccount() {
+        return new Queue(QUEUE_ACCOUNT);
+    }
+
+    @Bean
+    Queue queueTransaction() {
+        return new Queue(QUEUE_TRANSACTION);
+    }
+
+    @Bean
+    Binding bindingAccount(TopicExchange exchange) {
+        return BindingBuilder.bind(queueAccount()).to(exchange).with(ROUTING_KEY_ACCOUNT);
+    }
+
+    @Bean
+    Binding bindingTransaction(TopicExchange exchange) {
+        return BindingBuilder.bind(queueTransaction()).to(exchange).with(ROUTING_KEY_TRANSACTION);
     }
 
     @Bean
