@@ -26,7 +26,6 @@ public class BalanceMapper {
                         balances::add
                 );
         return balances;
-
     }
 
     public static BalanceDto toBalanceDto(Balance balance) {
@@ -37,6 +36,7 @@ public class BalanceMapper {
     }
     public static Balance toBalance(BalanceDto balance) {
         return Balance.builder()
+                .accountId(balance.getAccountId())
                 .balance(balance.getBalance())
                 .currency(balance.getCurrency())
                 .build();

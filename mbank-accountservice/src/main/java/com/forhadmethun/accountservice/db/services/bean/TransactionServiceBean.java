@@ -17,6 +17,7 @@ import com.forhadmethun.accountservice.utility.dto.mapper.TransactionMapper;
 import com.forhadmethun.accountservice.utility.dto.model.DirectionOfTransaction;
 import com.forhadmethun.accountservice.utility.dto.model.TransactionDto;
 
+import com.forhadmethun.accountservice.utility.io.TransactionCreationInfo;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -54,7 +55,7 @@ public class TransactionServiceBean implements TransactionService {
 
         changeBalanceAmountByDirection(transactionDto, balance);
 
-        balanceService.saveBalance(balance);
+        Balance savedBalance = balanceService.saveBalance(balance);
 
         Transaction savedTransaction =
                 transactionRepository.save(TransactionMapper.toTransaction(transactionDto));
@@ -64,7 +65,12 @@ public class TransactionServiceBean implements TransactionService {
 
         savedTransactionDto.setBalanceAfterTransaction(balance.getBalance());
 
-        messageQueueService.publishCreateTransaction(savedTransactionDto);
+        messageQueueService.publishCreateTransaction(
+                TransactionCreationInfo.builder()
+                    .transaction(savedTransaction)
+                    .balance(savedBalance)
+                    .build()
+        );
 
         return savedTransactionDto;
     }

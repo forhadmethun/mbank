@@ -7,8 +7,10 @@ package com.forhadmethun.accountservice.db.services.bean;
 
 import com.forhadmethun.accountservice.db.services.MessageQueueService;
 import com.forhadmethun.accountservice.utility.dto.model.TransactionDto;
+import com.forhadmethun.accountservice.utility.io.AccountCreationInfo;
 import com.forhadmethun.accountservice.utility.io.AccountOperationResponse;
 
+import com.forhadmethun.accountservice.utility.io.TransactionCreationInfo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -33,13 +35,13 @@ public class MessageQueueBean implements MessageQueueService {
 
     @Async
     @Override
-    public void publishCreateAccount(AccountOperationResponse accountOperationResponse) {
-        rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY_ACCOUNT, accountOperationResponse);
+    public void publishCreateAccount(AccountCreationInfo accountCreationInfo) {
+        rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY_ACCOUNT, accountCreationInfo);
     }
 
     @Async
     @Override
-    public void publishCreateTransaction(TransactionDto transaction) {
-        rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY_TRANSACTION, transaction);
+    public void publishCreateTransaction(TransactionCreationInfo transactionCreationInfo) {
+        rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY_TRANSACTION, transactionCreationInfo);
     }
 }

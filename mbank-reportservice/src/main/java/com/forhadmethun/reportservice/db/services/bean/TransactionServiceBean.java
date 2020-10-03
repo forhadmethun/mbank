@@ -5,14 +5,13 @@ package com.forhadmethun.reportservice.db.services.bean;
  * @since 01/10/20
  */
 
-import com.forhadmethun.reportservice.db.entity.Balance;
 import com.forhadmethun.reportservice.db.repository.TransactionRepository;
 import com.forhadmethun.reportservice.db.services.BalanceService;
 import com.forhadmethun.reportservice.db.services.TransactionService;
-import com.forhadmethun.reportservice.utility.dto.mapper.TransactionMapper;
-import com.forhadmethun.reportservice.utility.dto.model.DirectionOfTransaction;
-import com.forhadmethun.reportservice.utility.dto.model.TransactionDto;
+import com.forhadmethun.reportservice.utility.io.TransactionCreationInfo;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class TransactionServiceBean implements TransactionService {
@@ -24,18 +23,13 @@ public class TransactionServiceBean implements TransactionService {
         this.balanceService = balanceService;
     }
 
+    @Transactional
     @Override
-    public TransactionDto createTransaction(TransactionDto transactionDto, Balance balance) {
-        if(transactionDto.getDirectionOfTransaction() ==  DirectionOfTransaction.IN ){
-            balance.setBalance(balance.getBalance().add(transactionDto.getAmount()));
-        }
-        else if(transactionDto.getDirectionOfTransaction() == DirectionOfTransaction.OUT){
-            balance.setBalance(balance.getBalance().subtract(transactionDto.getAmount()));
-        }
-        balanceService.saveBalance(balance);
-        var savedTransaction = transactionRepository.save(TransactionMapper.toTransaction(transactionDto));
-        var savedTransactionDto = TransactionMapper.toTransactionDto(savedTransaction);
-        savedTransactionDto.setBalanceAfterTransaction(balance.getBalance());
-        return savedTransactionDto;
+    public void createTransaction(
+            TransactionCreationInfo transactionCreationInfo
+    ) {
+        balanceService.saveBalance(transactionCreationInfo.getBalance());
+        transactionRepository.save(transactionCreationInfo.getTransaction());
     }
+
 }

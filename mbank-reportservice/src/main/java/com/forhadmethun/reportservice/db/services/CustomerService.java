@@ -5,8 +5,10 @@ package com.forhadmethun.reportservice.db.services;
  * @since 01/10/20
  */
 
-import com.forhadmethun.reportservice.db.entity.Customer;
+import com.forhadmethun.reportservice.utility.io.AccountCreationInfo;
+import com.forhadmethun.reportservice.utility.io.AccountOperationResponse;
 
 public interface CustomerService {
-    Customer createCustomer(Customer customer);
+    void createCustomer(AccountCreationInfo accountCreationInfo);
+
 }

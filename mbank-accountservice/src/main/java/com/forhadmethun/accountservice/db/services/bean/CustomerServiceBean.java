@@ -17,6 +17,7 @@ import com.forhadmethun.accountservice.utility.dto.mapper.AccountMapper;
 import com.forhadmethun.accountservice.utility.dto.mapper.BalanceMapper;
 import com.forhadmethun.accountservice.utility.dto.mapper.CustomerMapper;
 import com.forhadmethun.accountservice.utility.dto.model.CustomerDto;
+import com.forhadmethun.accountservice.utility.io.AccountCreationInfo;
 import com.forhadmethun.accountservice.utility.io.AccountOperationResponse;
 
 import org.springframework.stereotype.Service;
@@ -62,7 +63,13 @@ public class CustomerServiceBean implements CustomerService {
                         customerDto.getCustomerId(),
                         BalanceMapper.toBalanceDtoList(balances)
                 );
-        messageQueueService.publishCreateAccount(accountCreationResponse);
+        messageQueueService.publishCreateAccount(
+                AccountCreationInfo.builder()
+                        .customer(customer)
+                        .account(account)
+                        .balances(balances)
+                        .build()
+        );
         return accountCreationResponse;
     }
 }

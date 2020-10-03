@@ -32,28 +32,4 @@ public class AccountServiceBean implements AccountService {
             throw new PersistenceException(PersistenceConstant.ACCOUNT_NOT_FOUND);
         return account;
     }
-/*
-    @Override
-    public void createAccount(CustomerDto customerDto) {
-        Customer customer = customerRepository.save(CustomerMapper.toCustomer(customerDto));
-        accountRepository.save(
-                Account.builder()
-                        .customerId(customer.getCustomerId())
-                        .build()
-        );
-        saveCurrencies(customerDto.getCurrencies(), customer);
-
-    }
-    private void saveCurrencies(List<String> currencies, Customer customer){
-        //validate
-        currencies.stream().forEach(
-                currency -> customerCurrencyRepository
-                        .save(
-                                CustomerCurrency.builder()
-                                        .currencyCode(currency)
-                                        .customer(customer)
-                                        .build()
-                        ));
-
-    }*/
 }

@@ -12,4 +12,6 @@ import java.util.List;
 
 public interface BalanceRepository extends CrudRepository<Balance, Long> {
     List<Balance> findByAccountId(Long accountId);
+
+    Balance findByAccountIdAndCurrency(Long accountId, String currency);
 }

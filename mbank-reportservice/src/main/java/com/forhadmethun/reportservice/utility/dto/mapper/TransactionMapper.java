@@ -11,6 +11,7 @@ import com.forhadmethun.reportservice.utility.dto.model.TransactionDto;
 public class TransactionMapper {
     public static Transaction toTransaction(TransactionDto transactionDto){
         return Transaction.builder()
+                .transactionId(transactionDto.getTransactionId())
                 .accountId(transactionDto.getAccountId())
                 .amount(transactionDto.getAmount())
                 .currency(transactionDto.getCurrency())
