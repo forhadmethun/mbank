@@ -8,6 +8,6 @@ package com.forhadmethun.accountservice.db.repository;
 import com.forhadmethun.accountservice.db.entity.Account;
 import org.springframework.data.repository.CrudRepository;
 
-public interface AccountRepository extends CrudRepository<Account, Long> {
-    Account findByAccountId(Long accountId);
+public interface AccountCommandRepository extends CrudRepository<Account, Long> {
+
 }

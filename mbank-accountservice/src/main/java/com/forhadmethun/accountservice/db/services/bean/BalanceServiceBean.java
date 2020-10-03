@@ -6,7 +6,8 @@ package com.forhadmethun.accountservice.db.services.bean;
  */
 
 import com.forhadmethun.accountservice.db.entity.Balance;
-import com.forhadmethun.accountservice.db.repository.BalanceRepository;
+import com.forhadmethun.accountservice.db.repository.BalanceCommandRepository;
+import com.forhadmethun.accountservice.db.repository.BalanceQueryRepository;
 import com.forhadmethun.accountservice.db.services.BalanceService;
 import org.springframework.stereotype.Service;
 
@@ -16,32 +17,35 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class BalanceServiceBean implements BalanceService {
-    private final BalanceRepository balanceRepository;
+    private final BalanceCommandRepository balanceCommandRepository;
+    private final BalanceQueryRepository balanceQueryRepository;
 
-    public BalanceServiceBean(BalanceRepository balanceRepository) {
-        this.balanceRepository = balanceRepository;
+    public BalanceServiceBean(BalanceCommandRepository balanceCommandRepository,
+                              BalanceQueryRepository balanceQueryRepository) {
+        this.balanceCommandRepository = balanceCommandRepository;
+        this.balanceQueryRepository = balanceQueryRepository;
     }
 
     @Override
     public Balance saveBalance(Balance balance) {
-        return balanceRepository.save(balance);
+        return balanceCommandRepository.save(balance);
     }
 
     @Override
     public Balance findByAccountIdAndCurrency(Long accountId, String currency) {
-        return balanceRepository.findByAccountIdAndCurrency(accountId, currency);
+        return balanceQueryRepository.findByAccountIdAndCurrency(accountId, currency);
     }
 
     @Override
     public List<Balance> saveBalance(List<Balance> balances) {
         return StreamSupport.stream(
-                balanceRepository.saveAll(balances).spliterator(),
+                balanceCommandRepository.saveAll(balances).spliterator(),
                 false
         ).collect(Collectors.toList());
     }
 
     @Override
     public List<Balance> findByAccountId(Long accountId) {
-        return balanceRepository.findByAccountId(accountId);
+        return balanceQueryRepository.findByAccountId(accountId);
     }
 }

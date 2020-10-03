@@ -7,6 +7,7 @@ package com.forhadmethun.accountservice.db.services.bean;
 
 import com.forhadmethun.accountservice.db.entity.Balance;
 import com.forhadmethun.accountservice.db.entity.Transaction;
+import com.forhadmethun.accountservice.db.repository.TransactionQueryRepository;
 import com.forhadmethun.accountservice.db.repository.TransactionRepository;
 import com.forhadmethun.accountservice.db.services.BalanceService;
 import com.forhadmethun.accountservice.db.services.MessageQueueService;
@@ -24,15 +25,18 @@ import java.util.List;
 @Service
 public class TransactionServiceBean implements TransactionService {
     private final TransactionRepository transactionRepository;
+    private final TransactionQueryRepository transactionQueryRepository;
     private final BalanceService balanceService;
     private final MessageQueueService messageQueueService;
 
     public TransactionServiceBean(
             TransactionRepository transactionRepository,
+            TransactionQueryRepository transactionQueryRepository,
             BalanceService balanceService,
             MessageQueueService messageQueueService
     ) {
         this.transactionRepository = transactionRepository;
+        this.transactionQueryRepository = transactionQueryRepository;
         this.balanceService = balanceService;
         this.messageQueueService = messageQueueService;
     }
@@ -67,7 +71,7 @@ public class TransactionServiceBean implements TransactionService {
 
     @Override
     public List<Transaction> findByAccountId(Long accountId) {
-        return transactionRepository.findByAccountId(accountId);
+        return transactionQueryRepository.findByAccountId(accountId);
     }
 
     private void changeBalanceAmountByDirection(TransactionDto transactionDto, Balance balance){

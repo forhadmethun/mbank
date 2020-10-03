@@ -24,8 +24,7 @@ public class AccountController {
 
     public AccountController(
             CustomerService customerService,
-            AccountService accountService
-    ) {
+            AccountService accountService) {
         this.customerService = customerService;
         this.accountService = accountService;
     }
@@ -46,7 +45,6 @@ public class AccountController {
     public ResponseEntity<AccountOperationResponse> getAccount(
             @PathVariable Long accountId
     ) throws PersistenceException {
-
         AccountOperationResponse accountOperationResponse =
                 accountService.findByAccountId(accountId);
 
