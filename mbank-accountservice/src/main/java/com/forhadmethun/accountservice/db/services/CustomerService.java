@@ -5,8 +5,9 @@ package com.forhadmethun.accountservice.db.services;
  * @since 01/10/20
  */
 
-import com.forhadmethun.accountservice.db.entity.Customer;
+import com.forhadmethun.accountservice.utility.dto.model.CustomerDto;
+import com.forhadmethun.accountservice.utility.io.AccountOperationResponse;
 
 public interface CustomerService {
-    Customer createCustomer(Customer customer);
+    AccountOperationResponse createCustomer(CustomerDto customerDto);
 }

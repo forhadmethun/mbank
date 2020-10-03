@@ -11,6 +11,10 @@ import java.util.List;
 
 public interface BalanceService {
     Balance saveBalance(Balance balance);
+
+    Balance findByAccountIdAndCurrency(Long accountId, String currency);
+
     List<Balance> saveBalance(List<Balance> balance);
+
     List<Balance> findByAccountId(Long accountId);
 }

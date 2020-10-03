@@ -6,10 +6,11 @@ package com.forhadmethun.accountservice.utility.dto.mapper;
  */
 
 import com.forhadmethun.accountservice.db.entity.Account;
+import com.forhadmethun.accountservice.db.entity.Customer;
 import com.forhadmethun.accountservice.utility.dto.model.CustomerDto;
 
 public class AccountMapper {
-    public static Account toAccountFromCustomerDto(CustomerDto customer){
+    public static Account toAccountFromCustomer(Customer customer){
         return Account.builder()
                 .customerId(customer.getCustomerId())
                 .build();

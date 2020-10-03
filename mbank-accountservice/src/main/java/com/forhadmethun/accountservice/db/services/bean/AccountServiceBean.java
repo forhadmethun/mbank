@@ -8,16 +8,22 @@ package com.forhadmethun.accountservice.db.services.bean;
 import com.forhadmethun.accountservice.db.entity.Account;
 import com.forhadmethun.accountservice.db.repository.AccountRepository;
 import com.forhadmethun.accountservice.db.services.AccountService;
+import com.forhadmethun.accountservice.db.services.BalanceService;
 import com.forhadmethun.accountservice.utility.constant.PersistenceConstant;
+import com.forhadmethun.accountservice.utility.dto.mapper.BalanceMapper;
 import com.forhadmethun.accountservice.utility.exception.PersistenceException;
+import com.forhadmethun.accountservice.utility.io.AccountOperationResponse;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountServiceBean implements AccountService {
     private final AccountRepository accountRepository;
+    private final BalanceService balanceService;
 
-    public AccountServiceBean(AccountRepository accountRepository) {
+    public AccountServiceBean(AccountRepository accountRepository, BalanceService balanceService) {
         this.accountRepository = accountRepository;
+        this.balanceService = balanceService;
     }
 
     @Override
@@ -26,34 +32,21 @@ public class AccountServiceBean implements AccountService {
     }
 
     @Override
-    public Account findByAccountId(Long accountId) throws PersistenceException {
-        var account = accountRepository.findByAccountId(accountId);
+    public AccountOperationResponse findByAccountId(Long accountId) throws PersistenceException {
+        Account account =  accountRepository.findByAccountId(accountId);
+
         if (account == null)
             throw new PersistenceException(PersistenceConstant.ACCOUNT_NOT_FOUND);
-        return account;
-    }
-/*
-    @Override
-    public void createAccount(CustomerDto customerDto) {
-        Customer customer = customerRepository.save(CustomerMapper.toCustomer(customerDto));
-        accountRepository.save(
-                Account.builder()
-                        .customerId(customer.getCustomerId())
-                        .build()
-        );
-        saveCurrencies(customerDto.getCurrencies(), customer);
 
-    }
-    private void saveCurrencies(List<String> currencies, Customer customer){
-        //validate
-        currencies.stream().forEach(
-                currency -> customerCurrencyRepository
-                        .save(
-                                CustomerCurrency.builder()
-                                        .currencyCode(currency)
-                                        .customer(customer)
-                                        .build()
-                        ));
+        var balances = balanceService.findByAccountId(accountId);
 
-    }*/
+        AccountOperationResponse accountOperationResponse =
+                AccountOperationResponse.createAccountCreationResponse(
+                        account.getAccountId(),
+                        account.getCustomerId(),
+                        BalanceMapper.toBalanceDtoList(balances)
+                );
+
+        return accountOperationResponse;
+    }
 }

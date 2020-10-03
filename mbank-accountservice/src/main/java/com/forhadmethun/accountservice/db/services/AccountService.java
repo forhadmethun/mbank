@@ -7,8 +7,10 @@ package com.forhadmethun.accountservice.db.services;
 
 import com.forhadmethun.accountservice.db.entity.Account;
 import com.forhadmethun.accountservice.utility.exception.PersistenceException;
+import com.forhadmethun.accountservice.utility.io.AccountOperationResponse;
 
 public interface AccountService {
     Account createAccount(Account account);
-    Account findByAccountId(Long accountId) throws PersistenceException;
+
+    AccountOperationResponse findByAccountId(Long accountId) throws PersistenceException;
 }
