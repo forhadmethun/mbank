@@ -6,18 +6,10 @@ package com.forhadmethun.reportservice.component;
  */
 
 import com.forhadmethun.reportservice.config.RabbitMQConfiguration;
-import com.forhadmethun.reportservice.db.services.AccountService;
-import com.forhadmethun.reportservice.db.services.BalanceService;
 import com.forhadmethun.reportservice.db.services.CustomerService;
-import com.forhadmethun.reportservice.utility.dto.mapper.AccountMapper;
-import com.forhadmethun.reportservice.utility.dto.mapper.BalanceMapper;
-import com.forhadmethun.reportservice.utility.dto.mapper.CustomerMapper;
-import com.forhadmethun.reportservice.utility.dto.model.CustomerDto;
 import com.forhadmethun.reportservice.utility.io.AccountCreationInfo;
-import com.forhadmethun.reportservice.utility.io.AccountOperationResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -28,11 +28,6 @@ public class BalanceServiceBean implements BalanceService {
     }
 
     @Override
-    public Balance findByAccountIdAndCurrency(Long accountId, String currency) {
-        return balanceRepository.findByAccountIdAndCurrency(accountId, currency);
-    }
-
-    @Override
     public List<Balance> saveBalance(List<Balance> balances) {
         return StreamSupport.stream(
                 balanceRepository.saveAll(balances).spliterator(),

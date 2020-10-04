@@ -5,6 +5,7 @@ package com.forhadmethun.reportservice.db.services.bean;
  * @since 01/10/20
  */
 
+import com.forhadmethun.reportservice.db.entity.Transaction;
 import com.forhadmethun.reportservice.db.repository.TransactionRepository;
 import com.forhadmethun.reportservice.db.services.BalanceService;
 import com.forhadmethun.reportservice.db.services.TransactionService;
@@ -12,6 +13,7 @@ import com.forhadmethun.reportservice.utility.io.TransactionCreationInfo;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class TransactionServiceBean implements TransactionService {
@@ -30,6 +32,11 @@ public class TransactionServiceBean implements TransactionService {
     ) {
         balanceService.saveBalance(transactionCreationInfo.getBalance());
         transactionRepository.save(transactionCreationInfo.getTransaction());
+    }
+
+    @Override
+    public List<Transaction> findByAccountId(Long accountId) {
+        return transactionRepository.findByAccountId(accountId);
     }
 
 }

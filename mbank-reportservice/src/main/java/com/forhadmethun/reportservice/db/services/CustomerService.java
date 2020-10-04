@@ -6,9 +6,7 @@ package com.forhadmethun.reportservice.db.services;
  */
 
 import com.forhadmethun.reportservice.utility.io.AccountCreationInfo;
-import com.forhadmethun.reportservice.utility.io.AccountOperationResponse;
 
 public interface CustomerService {
     void createCustomer(AccountCreationInfo accountCreationInfo);
-
 }
