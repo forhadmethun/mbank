@@ -22,7 +22,7 @@ The prerequisite to set-up the environment is [Java 11+](https://www.google.com/
  - execute the following commands
 ```
 ./gradlew bootJar
-nohup java -jar /build/libs/ mbank-accountservice-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
+nohup java -jar build/libs/ mbank-accountservice-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
 ```
 ## To run report-service
  - open a terminal and navigate to `mbank-reportservice` directory
