@@ -3,6 +3,9 @@ The project consists of implementing 2 services:
  - Account to keep track of current accounts and balances
  - Reporting to keep track of all transactions on the account for reporting purposes
  
+ Both Account and reporting service contain integration tests and test coverage are
+ 80% +.
+ 
 # Technologies Used
   - Java 11+
   - SpringBoot
