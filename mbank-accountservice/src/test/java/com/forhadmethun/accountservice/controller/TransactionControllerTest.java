@@ -1,8 +1,6 @@
 package com.forhadmethun.accountservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.forhadmethun.accountservice.db.entity.Account;
-import com.forhadmethun.accountservice.db.entity.Transaction;
 import com.forhadmethun.accountservice.db.services.AccountService;
 import com.forhadmethun.accountservice.db.services.CustomerService;
 import com.forhadmethun.accountservice.db.services.TransactionService;
