@@ -1,9 +1,4 @@
-package com.forhadmethun.reportservice.utility.dto.model;
-
-/**
- * @author Md Forhad Hossain
- * @since 01/10/20
- */
+package com.forhadmethun.accountservice.utility.dto.model.mq;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BalanceDto {
+public class BalanceMQDto {
     private Long balanceId;
     private Long accountId;
     private String currency;

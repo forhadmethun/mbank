@@ -6,11 +6,9 @@ package com.forhadmethun.accountservice.db.services.bean;
  */
 
 import com.forhadmethun.accountservice.db.services.MessageQueueService;
-import com.forhadmethun.accountservice.utility.dto.model.TransactionDto;
-import com.forhadmethun.accountservice.utility.io.AccountCreationInfo;
-import com.forhadmethun.accountservice.utility.io.AccountOperationResponse;
+import com.forhadmethun.accountservice.utility.io.mq.AccountCreationInfo;
 
-import com.forhadmethun.accountservice.utility.io.TransactionCreationInfo;
+import com.forhadmethun.accountservice.utility.io.mq.TransactionCreationInfo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;

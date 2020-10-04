@@ -1,4 +1,4 @@
-package com.forhadmethun.reportservice.utility.dto.model;
+package com.forhadmethun.accountservice.utility.dto.model;
 
 /**
  * @author Md Forhad Hossain
@@ -10,15 +10,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BalanceDto {
-    private Long balanceId;
+public class AccountDto {
     private Long accountId;
-    private String currency;
-    private BigDecimal balance;
+    private Long customerId;
 }

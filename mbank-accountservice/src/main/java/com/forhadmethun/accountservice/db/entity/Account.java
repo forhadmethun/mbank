@@ -5,21 +5,33 @@ package com.forhadmethun.accountservice.db.entity;
  * @since 01/10/20
  */
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Entity
-@Data
+@Entity(name = "account")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Account {
+    private static final String SEQ_ACCOUNT = "seq_account_id";
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_ACCOUNT)
+    @SequenceGenerator(name= SEQ_ACCOUNT, sequenceName = SEQ_ACCOUNT, allocationSize = 1)
+    @Column(name = "account_id")
     private Long accountId;
-    private Long customerId;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    List<Balance> balances;
 }

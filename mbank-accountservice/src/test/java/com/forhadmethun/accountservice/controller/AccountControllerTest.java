@@ -1,9 +1,9 @@
 package com.forhadmethun.accountservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.forhadmethun.accountservice.db.entity.Account;
-import com.forhadmethun.accountservice.db.services.AccountService;
+import com.forhadmethun.accountservice.db.services.CustomerService;
 import com.forhadmethun.accountservice.utility.dto.model.CustomerDto;
+import com.forhadmethun.accountservice.utility.io.AccountOperationResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,23 +12,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class AccountControllerTest {
+
     @Autowired
-    private AccountService accountService;
+    CustomerService customerService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,7 +41,7 @@ class AccountControllerTest {
 
     @Test
     void createAccount() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
+        MvcResult mockMvcResult = mockMvc.perform(MockMvcRequestBuilders
                 .post("/accounts", 42L)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(
@@ -49,18 +52,36 @@ class AccountControllerTest {
                                 .build()
                 )))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customerId", is(1)))
-                .andExpect(jsonPath("$.balances", notNullValue()));
+                .andReturn();
+        String contentAsString = mockMvcResult.getResponse().getContentAsString();
+        AccountOperationResponse response = objectMapper.readValue(contentAsString, AccountOperationResponse.class);
+        assertEquals(1L, response.getCustomerId());
+        assertEquals(1, response.getBalances().size());
+        assertEquals("EUR", response.getBalances().get(0).getCurrency());
+        assertEquals(BigDecimal.ZERO, response.getBalances().get(0).getBalance());
     }
 
     @Test
     void getAccount() throws Exception {
-        Account account = new Account(1L, 1L);
-        accountService.createAccount(account);
-        mockMvc.perform(get("/accounts/1"))
+        AccountOperationResponse createdAccountObject =
+                customerService.createCustomer(
+                        CustomerDto.builder()
+                                .customerId(36L)
+                                .country("Bangladesh")
+                                .currencies(Arrays.asList("EUR"))
+                                .build()
+                );
+        MvcResult mockMvcResult  =
+                mockMvc.perform(get("/accounts/" + createdAccountObject.getAccountId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accountId", is(1)))
-                .andExpect(jsonPath("$.balances", notNullValue()));
+                .andExpect(jsonPath("$.balances[0].currency", is("EUR"))
+                ).andReturn();
+        String contentAsString = mockMvcResult.getResponse().getContentAsString();
+        AccountOperationResponse response = objectMapper.readValue(contentAsString, AccountOperationResponse.class);
+        assertEquals(response.getAccountId(), createdAccountObject.getAccountId());
+        assertEquals(response.getCustomerId(), createdAccountObject.getCustomerId());
+        assertEquals(response.getBalances().size(), createdAccountObject.getBalances().size());
+        assertEquals("EUR", response.getBalances().get(0).getCurrency());
     }
 }

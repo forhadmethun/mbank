@@ -7,8 +7,10 @@ package com.forhadmethun.accountservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
+@EnableAsync
 public class MbankAccountServiceApplication {
 
     public static void main(String[] args) {

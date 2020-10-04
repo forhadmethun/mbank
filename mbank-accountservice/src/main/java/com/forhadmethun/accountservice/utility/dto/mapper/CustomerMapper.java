@@ -15,4 +15,10 @@ public class CustomerMapper {
                 .country(customer.getCountry())
                 .build();
     }
+    public static CustomerDto toCustomerDto(Customer customer){
+        return CustomerDto.builder()
+                .customerId(customer.getCustomerId())
+                .country(customer.getCountry())
+                .build();
+    }
 }

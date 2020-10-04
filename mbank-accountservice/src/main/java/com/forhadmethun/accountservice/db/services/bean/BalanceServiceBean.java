@@ -9,6 +9,7 @@ import com.forhadmethun.accountservice.db.entity.Balance;
 import com.forhadmethun.accountservice.db.repository.BalanceCommandRepository;
 import com.forhadmethun.accountservice.db.repository.BalanceQueryRepository;
 import com.forhadmethun.accountservice.db.services.BalanceService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +17,10 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@AllArgsConstructor
 public class BalanceServiceBean implements BalanceService {
     private final BalanceCommandRepository balanceCommandRepository;
     private final BalanceQueryRepository balanceQueryRepository;
-
-    public BalanceServiceBean(BalanceCommandRepository balanceCommandRepository,
-                              BalanceQueryRepository balanceQueryRepository) {
-        this.balanceCommandRepository = balanceCommandRepository;
-        this.balanceQueryRepository = balanceQueryRepository;
-    }
 
     @Override
     public Balance saveBalance(Balance balance) {
@@ -33,7 +29,10 @@ public class BalanceServiceBean implements BalanceService {
 
     @Override
     public Balance findByAccountIdAndCurrency(Long accountId, String currency) {
-        return balanceQueryRepository.findByAccountIdAndCurrency(accountId, currency);
+        Balance balance =
+                balanceQueryRepository.findByAccountIdAndCurrency(accountId, currency);
+
+        return balance;
     }
 
     @Override

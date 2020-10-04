@@ -5,7 +5,6 @@ package com.forhadmethun.accountservice.db.services.bean;
  * @since 01/10/20
  */
 
-import com.forhadmethun.accountservice.db.entity.Account;
 import com.forhadmethun.accountservice.db.entity.Balance;
 import com.forhadmethun.accountservice.db.entity.Transaction;
 import com.forhadmethun.accountservice.db.repository.AccountQueryRepository;
@@ -16,37 +15,29 @@ import com.forhadmethun.accountservice.db.services.MessageQueueService;
 import com.forhadmethun.accountservice.db.services.TransactionService;
 import com.forhadmethun.accountservice.utility.TransactionUtil;
 import com.forhadmethun.accountservice.utility.constant.PersistenceConstant;
+import com.forhadmethun.accountservice.utility.dto.mapper.AccountMapper;
+import com.forhadmethun.accountservice.utility.dto.mapper.BalanceMapper;
 import com.forhadmethun.accountservice.utility.dto.mapper.TransactionMapper;
+import com.forhadmethun.accountservice.utility.dto.model.AccountDto;
 import com.forhadmethun.accountservice.utility.dto.model.DirectionOfTransaction;
 import com.forhadmethun.accountservice.utility.dto.model.TransactionDto;
-
 import com.forhadmethun.accountservice.utility.exception.PersistenceException;
-import com.forhadmethun.accountservice.utility.io.TransactionCreationInfo;
+import com.forhadmethun.accountservice.utility.io.mq.TransactionCreationInfo;
+
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TransactionServiceBean implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final TransactionQueryRepository transactionQueryRepository;
     private final BalanceService balanceService;
     private final MessageQueueService messageQueueService;
     private final AccountQueryRepository accountQueryRepository;
-
-    public TransactionServiceBean(
-            TransactionRepository transactionRepository,
-            TransactionQueryRepository transactionQueryRepository,
-            BalanceService balanceService,
-            MessageQueueService messageQueueService,
-            AccountQueryRepository accountQueryRepository) {
-        this.transactionRepository = transactionRepository;
-        this.transactionQueryRepository = transactionQueryRepository;
-        this.balanceService = balanceService;
-        this.messageQueueService = messageQueueService;
-        this.accountQueryRepository = accountQueryRepository;
-    }
 
     @Transactional
     @Override
@@ -58,11 +49,17 @@ public class TransactionServiceBean implements TransactionService {
                 );
 
         TransactionUtil.checkTransactionValidity(transactionDto, balance);
+
+        balance.setAccount(
+                AccountMapper.toAccount(
+                        accountQueryRepository.findByAccountId(transactionDto.getAccountId()))
+        );
+
         changeBalanceAmountByDirection(transactionDto, balance);
         Balance savedBalance = balanceService.saveBalance(balance);
 
         Transaction savedTransaction =
-                transactionRepository.save(TransactionMapper.toTransaction(transactionDto));
+                transactionRepository.save(TransactionMapper.toTransaction(transactionDto, balance));
 
         TransactionDto savedTransactionDto =
                 TransactionMapper.toTransactionDto(savedTransaction);
@@ -71,8 +68,8 @@ public class TransactionServiceBean implements TransactionService {
 
         messageQueueService.publishCreateTransaction(
                 TransactionCreationInfo.builder()
-                    .transaction(savedTransaction)
-                    .balance(savedBalance)
+                    .transaction(TransactionMapper.toTransactionDto(savedTransaction))
+                    .balance(BalanceMapper.toBalanceMQDto(savedBalance, transactionDto.getAccountId()))
                     .build()
         );
 
@@ -80,8 +77,8 @@ public class TransactionServiceBean implements TransactionService {
     }
 
     @Override
-    public List<Transaction> findByAccountId(Long accountId) throws PersistenceException {
-        Account account =  accountQueryRepository.findByAccountId(accountId);
+    public List<TransactionDto> findByAccountId(Long accountId) throws PersistenceException {
+        AccountDto account =  accountQueryRepository.findByAccountId(accountId);
 
         if (account == null)
             throw new PersistenceException(PersistenceConstant.ACCOUNT_NOT_FOUND);

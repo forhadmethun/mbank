@@ -5,7 +5,7 @@ package com.forhadmethun.accountservice.db.repository;
  * @since 01/10/20
  */
 
-import com.forhadmethun.accountservice.db.entity.Transaction;
+import com.forhadmethun.accountservice.utility.dto.model.TransactionDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -18,6 +18,6 @@ import java.util.List;
 @Repository
 public interface TransactionQueryRepository {
     @Select("select * from transaction where account_id = #{accountId}")
-    List<Transaction> findByAccountId(@Param("accountId") Long accountId);
+    List<TransactionDto> findByAccountId(@Param("accountId") Long accountId);
 }
 

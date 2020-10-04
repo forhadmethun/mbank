@@ -5,28 +5,37 @@ package com.forhadmethun.accountservice.db.entity;
  * @since 01/10/20
  */
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import java.math.BigDecimal;
 
-@Entity
-@Data
+@Entity(name = "balance")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Balance {
+    private static final String SEQ_BALANCE = "seq_balance_id";
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_BALANCE)
+    @SequenceGenerator(name= SEQ_BALANCE, sequenceName = SEQ_BALANCE, allocationSize = 1)
+    @Column(name = "balance_id")
     private Long balanceId;
-    private Long accountId;
+
+    @Column(name = "currency")
     private String currency;
+
+    @Column(name = "balance")
     private BigDecimal balance;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "account_id")
+    private Account account;
 }

@@ -5,16 +5,15 @@ package com.forhadmethun.accountservice.utility.dto.mapper;
  * @since 01/10/20
  */
 
+import com.forhadmethun.accountservice.db.entity.Balance;
 import com.forhadmethun.accountservice.db.entity.Transaction;
 import com.forhadmethun.accountservice.utility.dto.model.TransactionDto;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class TransactionMapper {
-    public static Transaction toTransaction(TransactionDto transactionDto){
+    public static Transaction toTransaction(TransactionDto transactionDto, Balance balance){
         return Transaction.builder()
-                .accountId(transactionDto.getAccountId())
+                .account(balance.getAccount())
                 .amount(transactionDto.getAmount())
                 .currency(transactionDto.getCurrency())
                 .directionOfTransaction(transactionDto.getDirectionOfTransaction())
@@ -24,16 +23,21 @@ public class TransactionMapper {
     public static TransactionDto toTransactionDto(Transaction transaction){
         return TransactionDto.builder()
                 .transactionId(transaction.getTransactionId())
-                .accountId(transaction.getAccountId())
+                .accountId(transaction.getAccount().getAccountId())
                 .amount(transaction.getAmount())
                 .currency(transaction.getCurrency())
                 .directionOfTransaction(transaction.getDirectionOfTransaction())
                 .description(transaction.getDescription())
                 .build();
     }
-    public static List<TransactionDto> toTransactionDto(List<Transaction> transactions){
-        return transactions.stream()
-                .map(TransactionMapper::toTransactionDto)
-                .collect(Collectors.toList());
+
+    public static Transaction toNewTransaction(Transaction transaction){
+        return Transaction.builder()
+                .account(transaction.getAccount())
+                .amount(transaction.getAmount())
+                .currency(transaction.getCurrency())
+                .directionOfTransaction(transaction.getDirectionOfTransaction())
+                .description(transaction.getDescription())
+                .build();
     }
 }

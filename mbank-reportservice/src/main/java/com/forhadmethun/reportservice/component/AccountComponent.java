@@ -15,19 +15,15 @@ import com.forhadmethun.reportservice.utility.dto.mapper.CustomerMapper;
 import com.forhadmethun.reportservice.utility.dto.model.CustomerDto;
 import com.forhadmethun.reportservice.utility.io.AccountCreationInfo;
 import com.forhadmethun.reportservice.utility.io.AccountOperationResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 public class AccountComponent {
     private final CustomerService customerService;
-
-    public AccountComponent(
-            CustomerService customerService
-    ) {
-        this.customerService = customerService;
-    }
 
     @RabbitListener(queues = RabbitMQConfiguration.QUEUE_ACCOUNT)
     public void createAccount(
