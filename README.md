@@ -17,7 +17,7 @@ The project consists of implementing 2 services:
   - JUnit
   
 # Environment Setup 
-The prerequisite to set-up the environment is [Java 11+](https://www.google.com/search?sxsrf=ALeKk00w29150FaDFXOwluYtW26vardUFg%3A1601836529895&ei=8RV6X6n9Ne_jkgWJjaTQBQ&q=jdk+14+setup&oq=jdk+14+setup&gs_lcp=CgZwc3ktYWIQAzICCAA6BAgAEEc6BwgAEBQQhwJQ7zlYykBgqEJoAHADeACAAZoBiAGYBZIBAzAuNZgBAKABAaoBB2d3cy13aXrIAQjAAQE&sclient=psy-ab&ved=0ahUKEwjpueiKypvsAhXvsaQKHYkGCVoQ4dUDCA0&uact=5),  [docker](https://docs.docker.com/get-docker/) and [docker-composer](https://docs.docker.com/compose/install/). Once all these things are installed then go to [/environment-setup](https://github.com/forhadmethun/mbank/tree/master/environment-setup) directory to setup PostgreSQL & RabbitMQ. 
+The prerequisite to set-up the environment is [Java 11+](https://www.google.com/search?sxsrf=ALeKk00w29150FaDFXOwluYtW26vardUFg%3A1601836529895&ei=8RV6X6n9Ne_jkgWJjaTQBQ&q=jdk+14+setup&oq=jdk+14+setup&gs_lcp=CgZwc3ktYWIQAzICCAA6BAgAEEc6BwgAEBQQhwJQ7zlYykBgqEJoAHADeACAAZoBiAGYBZIBAzAuNZgBAKABAaoBB2d3cy13aXrIAQjAAQE&sclient=psy-ab&ved=0ahUKEwjpueiKypvsAhXvsaQKHYkGCVoQ4dUDCA0&uact=5),  [docker](https://docs.docker.com/get-docker/) and [docker-composer](https://docs.docker.com/compose/install/). Once all these things are installed then go to [/environment-setup](https://github.com/forhadmethun/mbank/tree/master/environment-setup) directory to get the instruction to setup PostgreSQL & RabbitMQ. 
 
 # Running the Services
 ## To run account-service
