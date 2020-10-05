@@ -67,4 +67,4 @@ CREATE TABLE transaction
 ALTER SEQUENCE seq_transaction_id
     owned by transaction.transaction_id;
 
-CREATE UNIQUE INDEX transaction_idx ON transaction (account_id);
+CREATE INDEX transaction_idx ON transaction (account_id);

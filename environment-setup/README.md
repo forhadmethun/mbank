@@ -5,7 +5,7 @@ This setup assumes you already have docker-compose and docker (using docker tool
 * docker-compose
 
 ## Quick Start
-* Run this command `docker-compose up -d`
+* navigate to `environment-setup` directory with terminal and run this command `docker-compose up -d` if required use `sudo docker-compose up -d` and it will pull and run PostgreSQL and RabbitMQ in background  
 
 
 ## Environments
