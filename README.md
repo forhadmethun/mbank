@@ -27,6 +27,11 @@ The prerequisite to set-up the environment is [Java 11+](https://www.google.com/
 ./gradlew bootJar
 nohup java -jar build/libs/mbank-accountservice-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 & #it will run the process in background
 ```
+NB. If you don't want to run the process in background then you can run the command as following: 
+``` 
+java -jar build/libs/mbank-accountservice-0.0.1-SNAPSHOT.jar
+```
+
 ## To run report-service
  - open a terminal and navigate to `mbank-reportservice` directory
 
